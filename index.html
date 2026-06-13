@@ -1,0 +1,161 @@
+﻿<!doctype html>
+<html lang="pl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<div id="page-home" class="page active">
+  <h2 class="sr-only">Nauka koniugacji hiszpańskiej</h2>
+  <p class="home-title">Koniugacja hiszpańska</p>
+  <p class="home-sub">Wybierz poziom i czas, który chcesz ćwiczyć</p>
+
+  <div class="home-tabs" role="tablist" aria-label="Tryb nauki">
+    <button class="home-tab active" id="tab-verbs" onclick="showHomeTab('verbs')" type="button">Czasowniki</button>
+    <button class="home-tab" id="tab-accents" onclick="showHomeTab('accents')" type="button">Akcenty</button>
+  </div>
+
+  <div class="home-section active" id="home-verbs">
+  <section class="mode-panel" aria-labelledby="verb-list-title">
+    <button type="button" class="verb-list-toggle" onclick="toggleVerbList()" aria-expanded="false" id="verb-list-toggle">
+      <span id="verb-list-title">Lista czasowników</span>
+      <span id="verb-list-arrow">+</span>
+    </button>
+    <div class="verb-list-panel" id="verb-list-panel"></div>
+  </section>
+
+  <section class="mode-panel" aria-labelledby="difficulty-title">
+    <div class="settings-row">
+      <label class="region-toggle">
+        <input type="checkbox" id="spain-mode-toggle" onchange="setSpainMode(this.checked)">
+        <span>
+          <span class="region-title">Hiszpański z Hiszpanii</span>
+          <span class="region-meta">Dodaje vosotros do odmian (oprócz pretérito perfecto).</span>
+        </span>
+      </label>
+      <label class="region-toggle">
+        <input type="checkbox" id="sentence-mode-toggle" onchange="setSentenceMode(this.checked)">
+        <span>
+          <span class="region-title">Zdania</span>
+          <span class="region-meta">Pokazuje losowe zdanie z luką zamiast samej osoby.</span>
+        </span>
+      </label>
+    </div>
+    <div class="panel-title" id="difficulty-title">Poziom trudności</div>
+    <div class="difficulty-options" id="difficulty-options"></div>
+  </section>
+
+  <div class="tense-select-wrap">
+    <label class="tense-select-label" for="tense-select">Czas</label>
+    <select class="tense-select" id="tense-select" onchange="selectPracticeMode(this.value)">
+      <option value="indefinido">Pretérito indefinido</option>
+      <option value="imperfecto">Pretérito imperfecto</option>
+      <option value="perfecto">Pretérito perfecto</option>
+      <option value="futuro">Futuro imperfecto</option>
+      <option value="subjuntivo">Subjuntivo presente</option>
+      <option value="subjuntivo_imperfecto">Subjuntivo imperfecto</option>
+      <option value="mix">Mix czasów</option>
+      <option value="favorites">Moje trudne</option>
+    </select>
+  </div>
+
+  <div class="tense-grid">
+    <div class="tense-card" data-mode="indefinido" onclick="selectPracticeMode('indefinido')">
+      <div class="tense-icon">📖</div>
+      <div class="tense-label">Pretérito indefinido</div>
+      <div class="tense-desc">hablé, comí, fui...</div>
+    </div>
+    <div class="tense-card" data-mode="imperfecto" onclick="selectPracticeMode('imperfecto')">
+      <div class="tense-icon">↻</div>
+      <div class="tense-label">Pretérito imperfecto</div>
+      <div class="tense-desc">hablaba, comía, era...</div>
+    </div>
+    <div class="tense-card" data-mode="perfecto" onclick="selectPracticeMode('perfecto')">
+      <div class="tense-icon">✓</div>
+      <div class="tense-label">Pretérito perfecto</div>
+      <div class="tense-desc">abrir → abierto</div>
+    </div>
+    <div class="tense-card" data-mode="futuro" onclick="selectPracticeMode('futuro')">
+      <div class="tense-icon">⏭</div>
+      <div class="tense-label">Futuro imperfecto</div>
+      <div class="tense-desc">hablaré, tendré, iré...</div>
+    </div>
+    <div class="tense-card" data-mode="subjuntivo" onclick="selectPracticeMode('subjuntivo')">
+      <div class="tense-icon">◇</div>
+      <div class="tense-label">Subjuntivo presente</div>
+      <div class="tense-desc">hable, coma, sea...</div>
+    </div>
+    <div class="tense-card" data-mode="subjuntivo_imperfecto" onclick="selectPracticeMode('subjuntivo_imperfecto')">
+      <div class="tense-icon">◈</div>
+      <div class="tense-label">Subjuntivo imperfecto</div>
+      <div class="tense-desc">hablara, tuviera, fuera...</div>
+    </div>
+    <div class="tense-card" data-mode="mix" onclick="selectPracticeMode('mix')">
+      <div class="tense-icon">⇄</div>
+      <div class="tense-label">Mix czasów</div>
+      <div class="tense-desc">losowo ze wszystkich czasów</div>
+    </div>
+    <div class="tense-card" data-mode="favorites" onclick="selectPracticeMode('favorites')">
+      <div class="tense-icon">★</div>
+      <div class="tense-label">Moje trudne</div>
+      <div class="tense-desc">czasowniki oznaczone gwiazdką</div>
+    </div>
+  </div>
+  <div class="start-panel">
+    <div class="selection-note" id="selection-note"></div>
+    <button class="btn btn-green" type="button" onclick="startSelectedPractice()">Start</button>
+  </div>
+
+  <section class="stats-panel" aria-labelledby="stats-title">
+    <div class="panel-title" id="stats-title">Statystyka</div>
+    <div id="stats-summary"></div>
+    <div class="panel-title" style="margin-top:12px;">Najgorsze czasowniki</div>
+    <div id="worst-verbs"></div>
+  </section>
+  </div>
+
+  <div class="home-section" id="home-accents">
+  <section class="mode-panel" aria-labelledby="accent-list-title">
+    <button type="button" class="verb-list-toggle" onclick="toggleAccentList()" aria-expanded="false" id="accent-list-toggle">
+      <span id="accent-list-title">Lista słów z akcentami</span>
+      <span id="accent-list-arrow">+</span>
+    </button>
+    <div class="verb-list-panel" id="accent-list-panel"></div>
+  </section>
+
+  <section class="mode-panel" aria-labelledby="accent-difficulty-title">
+    <div class="panel-title" id="accent-difficulty-title">Poziom akcentów</div>
+    <div class="difficulty-options" id="accent-difficulty-options"></div>
+  </section>
+  <div class="accent-start-card">
+    <div class="tense-label">Akcenty</div>
+    <div class="tense-desc">Dostajesz słowo bez akcentu i znaczenie po polsku, wpisujesz poprawną wersję po hiszpańsku.</div>
+    <button class="btn btn-purple" onclick="startAccentQuiz()">Start: Akcenty</button>
+  </div>
+  <section class="stats-panel" aria-labelledby="accent-stats-title">
+    <div class="panel-title" id="accent-stats-title">Akcenty: statystyka</div>
+    <div id="accent-stats-summary"></div>
+    <div class="panel-title" style="margin-top:12px;">Akcenty: najgorsze słowa</div>
+    <div id="accent-worst-words"></div>
+    <div class="panel-title" style="margin-top:12px;">Akcenty: trudne słowa</div>
+    <div id="accent-hard-words"></div>
+  </section>
+  </div>
+</div>
+
+<div id="page-exercise" class="page">
+  <button class="back-btn" onclick="goHome()"><i class="ti ti-arrow-left" aria-hidden="true"></i> Strona główna</button>
+  <div class="ex-header">
+    <div class="ex-title" id="ex-title"></div>
+    <div class="ex-sub" id="ex-sub"></div>
+  </div>
+  <div class="progress-bar"><div class="progress-fill" id="progress"></div></div>
+  <div class="counter" id="counter"></div>
+  <div id="exercise-area"></div>
+</div>
+
+<script src="app.js"></script>
+</body>
+</html>
